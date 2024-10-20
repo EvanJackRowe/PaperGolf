@@ -2,7 +2,7 @@
 
 This is the repository for a mini golf platformer I am working on for school.
 
-You can play the (quite scuffed) game [here](rlft09.github.io/project).
+You can play the (quite scuffed) game [here](https://rlft09.github.io/PaperGolf/).
 
  # Recent Updates:
 
