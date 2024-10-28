@@ -6,11 +6,15 @@ Resources:
     # Properties:
       # AccessControl: Private
 
-  CloudFrontOriginIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+  CloudFrontOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
     Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: 'origin identity'
+      OriginAccessControlConfig:
+        Description: "Allow access to app bucket"
+        Name: !Sub "${AWS::StackName}-OAC"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SingingProtocol: sigv4
 
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -21,9 +25,12 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginIdentity}'
+              Service: cloudfront.amazonaws.com
             Action: 's3:GetObject'
             Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudfrontDistribution}"
 
   Certificate: 
     Type: "AWS::CertificateManager::Certificate"
@@ -44,7 +51,8 @@ Resources:
           - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
             Id: S3-private-bucket
             S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
+              OriginAccessIdentity: ''
+            OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
         Enabled: 'true'
         Comment: Some comment
         PriceClass: PriceClass_100
