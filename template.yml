@@ -15,7 +15,7 @@ Resources:
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: private-bucket
+      Bucket: !Ref WebsiteBucket
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
