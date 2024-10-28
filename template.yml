@@ -66,6 +66,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
           AcmCertificateArn: !Ref Certificate
+          SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1
 
   DNSEntry:
