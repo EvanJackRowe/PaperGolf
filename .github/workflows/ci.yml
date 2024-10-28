@@ -37,3 +37,9 @@ jobs:
 
       - name: Deploy Stack
         run: sam deploy
+
+      - name: Publish Site
+        uses: jakejarvis/s3-sync-action@master
+        env:
+          AWS_S3_BUCKET: paper-golf-websitebucket-y0zlndmkxxgx
+          SOURCE_DIR: 'site'
