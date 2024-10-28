@@ -3,7 +3,7 @@ default:
   deploy:
     parameters:
       resolve_s3: true
-      stack_name: dev-ops-dsm
+      stack_name: paper-golf
       fail_on_empty_changeset: false
       capabilities:
         - CAPABILITY_IAM
