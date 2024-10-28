@@ -4,7 +4,7 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: Private
+      # AccessControl: Private
 
   CloudFrontOriginIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -25,10 +25,18 @@ Resources:
             Action: 's3:GetObject'
             Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
 
+  Certificate: 
+    Type: "AWS::CertificateManager::Certificate"
+    Properties: 
+      DomainName: papergolf.click
+      ValidationMethod: DNS
+
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - papergolf.click
         Origins:
           - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
             Id: S3-private-bucket
@@ -48,4 +56,7 @@ Resources:
               Forward: none
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
-          CloudFrontDefaultCertificate: 'true'
+          AcmCertificateArn: !Ref Certificate
+
+
+  
