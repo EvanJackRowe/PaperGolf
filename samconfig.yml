@@ -1,0 +1,9 @@
+version: 0.1
+default:
+  deploy:
+    parameters:
+      resolve_s3: true
+      stack_name: dev-ops-dsm
+      fail_on_empty_changeset: false
+      capabilities:
+        - CAPABILITY_IAM

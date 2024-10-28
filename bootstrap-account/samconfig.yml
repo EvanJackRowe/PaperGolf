@@ -1,0 +1,8 @@
+version: 0.1
+default:
+  deploy:
+    parameters:
+      stack_name: bootstrap-account
+      fail_on_empty_changeset: false
+      capabilities:
+        - CAPABILITY_NAMED_IAM
