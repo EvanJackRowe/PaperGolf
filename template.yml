@@ -3,8 +3,6 @@ Transform: AWS::Serverless-2016-10-31
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
-    # Properties:
-      # AccessControl: Private
 
   CloudFrontOriginAccessControl:
     Type: AWS::CloudFront::OriginAccessControl
@@ -16,21 +14,21 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
-  # BucketPolicy:
-  #   Type: AWS::S3::BucketPolicy
-  #   Properties:
-  #     Bucket: !Ref WebsiteBucket
-  #     PolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #         - Effect: Allow
-  #           Principal:
-  #             Service: cloudfront.amazonaws.com
-  #           Action: 's3:GetObject'
-  #           Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
-  #           Condition:
-  #             StringEquals:
-  #               AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudfrontDistribution}"
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${WebsiteBucket}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudfrontDistribution}"
 
   Certificate: 
     Type: "AWS::CertificateManager::Certificate"
@@ -41,41 +39,41 @@ Resources:
         - DomainName: papergolf.click
           HostedZoneId: Z10339302WXK4XMBSQ0CV
 
-  # CloudfrontDistribution:
-  #   Type: AWS::CloudFront::Distribution
-  #   Properties:
-  #     DistributionConfig:
-  #       Aliases:
-  #         - papergolf.click
-  #       Origins:
-  #         - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
-  #           Id: S3-private-bucket
-  #           S3OriginConfig:
-  #             OriginAccessIdentity: ''
-  #           OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
-  #       Enabled: 'true'
-  #       Comment: Some comment
-  #       PriceClass: PriceClass_100
-  #       DefaultCacheBehavior:
-  #         AllowedMethods:
-  #           - GET
-  #           - HEAD
-  #         TargetOriginId: S3-private-bucket
-  #         ForwardedValues:
-  #           QueryString: 'false'
-  #           Cookies:
-  #             Forward: none
-  #         ViewerProtocolPolicy: redirect-to-https
-  #       ViewerCertificate:
-  #         AcmCertificateArn: !Ref Certificate
-  #         MinimumProtocolVersion: TLSv1
+  CloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - papergolf.click
+        Origins:
+          - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
+            Id: S3-private-bucket
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+            OriginAccessControlId: !GetAtt CloudFrontOriginAccessControl.Id
+        Enabled: 'true'
+        Comment: Some comment
+        PriceClass: PriceClass_100
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: S3-private-bucket
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+          AcmCertificateArn: !Ref Certificate
+          MinimumProtocolVersion: TLSv1
 
-  # DNSEntry:
-  #   Type: AWS::Route53::RecordSet
-  #   Properties:
-  #     HostedZoneId: Z10339302WXK4XMBSQ0CV
-  #     Name: papergolf.click
-  #     Type: A
-  #     AliasTarget:
-  #       HostedZoneId: Z2FDTNDATAQYW2
-  #       DNSName: !GetAtt CloudfrontDistribution.DomainName
+  DNSEntry:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: Z10339302WXK4XMBSQ0CV
+      Name: papergolf.click
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName: !GetAtt CloudfrontDistribution.DomainName
