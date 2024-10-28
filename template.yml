@@ -14,7 +14,7 @@ Resources:
         Name: !Sub "${AWS::StackName}-OAC"
         OriginAccessControlOriginType: s3
         SigningBehavior: always
-        SingingProtocol: sigv4
+        SigningProtocol: sigv4
 
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -69,7 +69,6 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref Certificate
           MinimumProtocolVersion: TLSv1
-          SslSupportMethod: sni-only
 
   DNSEntry:
     Type: AWS::Route53::RecordSet
