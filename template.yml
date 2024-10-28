@@ -30,6 +30,9 @@ Resources:
     Properties: 
       DomainName: papergolf.click
       ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: papergolf.click
+          HostedZoneId: Z10339302WXK4XMBSQ0CV
 
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
