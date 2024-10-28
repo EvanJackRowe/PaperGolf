@@ -34,39 +34,40 @@ Resources:
         - DomainName: papergolf.click
           HostedZoneId: Z10339302WXK4XMBSQ0CV
 
-  CloudfrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Aliases:
-          - papergolf.click
-        Origins:
-          - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
-            Id: S3-private-bucket
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
-        Enabled: 'true'
-        Comment: Some comment
-        PriceClass: PriceClass_100
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - GET
-            - HEAD
-          TargetOriginId: S3-private-bucket
-          ForwardedValues:
-            QueryString: 'false'
-            Cookies:
-              Forward: none
-          ViewerProtocolPolicy: redirect-to-https
-        ViewerCertificate:
-          AcmCertificateArn: !Ref Certificate
+  # CloudfrontDistribution:
+  #   Type: AWS::CloudFront::Distribution
+  #   Properties:
+  #     DistributionConfig:
+  #       Aliases:
+  #         - papergolf.click
+  #       Origins:
+  #         - DomainName: !GetAtt WebsiteBucket.RegionalDomainName
+  #           Id: S3-private-bucket
+  #           S3OriginConfig:
+  #             OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
+  #       Enabled: 'true'
+  #       Comment: Some comment
+  #       PriceClass: PriceClass_100
+  #       DefaultCacheBehavior:
+  #         AllowedMethods:
+  #           - GET
+  #           - HEAD
+  #         TargetOriginId: S3-private-bucket
+  #         ForwardedValues:
+  #           QueryString: 'false'
+  #           Cookies:
+  #             Forward: none
+  #         ViewerProtocolPolicy: redirect-to-https
+  #       ViewerCertificate:
+  #         AcmCertificateArn: !Ref Certificate
+  #         SslSupportMethod: 
 
-  DNSEntry:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneName: papergolf.click
-      Name: papergolf.click
-      Type: A
-      AliasTarget:
-        HostedZoneId: Z2FDTNDATAQYW2
-        DNSName: !GetAtt CloudfrontDistribution.DomainName
+  # DNSEntry:
+  #   Type: AWS::Route53::RecordSet
+  #   Properties:
+  #     HostedZoneName: papergolf.click
+  #     Name: papergolf.click
+  #     Type: A
+  #     AliasTarget:
+  #       HostedZoneId: Z2FDTNDATAQYW2
+  #       DNSName: !GetAtt CloudfrontDistribution.DomainName
