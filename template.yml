@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
-    Properties:
+    # Properties:
       # AccessControl: Private
 
   CloudFrontOriginIdentity:
@@ -58,5 +58,12 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref Certificate
 
-
-  
+  DNSEntry:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: papergolf.click
+      Name: papergolf.click
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName: !GetAtt CloudfrontDistribution.DomainName
